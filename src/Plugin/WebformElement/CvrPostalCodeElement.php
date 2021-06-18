@@ -8,7 +8,7 @@ use Drupal\webform\Plugin\WebformElement\TextField;
  * @WebformElement(
  *   id = "cvr_postal_code_element",
  *   label = "CVR Postal Code Element",
- *   description = "CVR Postal Code Element description",
+ *   description = "This element will be populated with the Postal Code from the CVR query result",
  *   category = "CVR elements"
  * )
  */

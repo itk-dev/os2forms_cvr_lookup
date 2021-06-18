@@ -8,7 +8,7 @@ use Drupal\webform\Plugin\WebformElement\TextField;
  * @WebformElement(
  *   id = "cvr_name_element",
  *   label = "CVR Name Element",
- *   description = "CVR Name Element description",
+ *   description = "This element will be populated with the Name from the CVR query result",
  *   category = "CVR elements"
  * )
  */
