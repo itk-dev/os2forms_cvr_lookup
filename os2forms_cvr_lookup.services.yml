@@ -1,0 +1,4 @@
+services:
+  os2forms_cvr_lookup.service:
+    class: Drupal\os2forms_cvr_lookup\Service\CvrService
+    arguments: ["@http_client", "@config.factory"]
