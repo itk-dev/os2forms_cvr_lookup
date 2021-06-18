@@ -35,6 +35,10 @@ class CvrElement extends Textfield {
 
   /**
    * Validation.
+   *
+   * @param $element
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @param $complete_form
    */
   public function validate(&$element, FormStateInterface $form_state, &$complete_form) {
     if ($element['#value'] !== '') {
@@ -46,6 +50,13 @@ class CvrElement extends Textfield {
 
   /**
    * Call back method when performing ajax request.
+   *
+   * @param array $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *
+   * @throws \ItkDev\Serviceplatformen\Service\Exception\ServiceException
    */
   public function ajaxCallback(array &$form, FormStateInterface $form_state) {
 
@@ -97,7 +108,7 @@ class CvrElement extends Textfield {
    *
    * @return \Drupal\Core\Ajax\InvokeCommand
    */
-  private function getNameInvokeCommand(CvrServiceResult  $result) {
+  private function getNameInvokeCommand(CvrServiceResult $result) {
     $selector = '.cvr-name';
     $method = 'val';
     $arguments = [$result->getName()];
@@ -164,4 +175,5 @@ class CvrElement extends Textfield {
 
     return new InvokeCommand($selector, $method, $arguments);
   }
+
 }

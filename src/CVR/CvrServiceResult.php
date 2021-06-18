@@ -4,6 +4,9 @@ namespace Drupal\os2forms_cvr_lookup\CVR;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+/**
+ *
+ */
 class CvrServiceResult {
 
   /**
@@ -20,6 +23,9 @@ class CvrServiceResult {
    */
   private $propertyAccessor;
 
+  /**
+   * Constructor.
+   */
   public function __construct(object $response) {
     $this->response = $response;
     $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
@@ -53,7 +59,7 @@ class CvrServiceResult {
   }
 
   /**
-   * Get Postal Code
+   * Get Postal Code.
    *
    * @return string
    */
@@ -61,9 +67,8 @@ class CvrServiceResult {
     return $this->getProperty('GetLegalUnitResponse.LegalUnit.AddressOfficial.AddressPostalExtended.PostCodeIdentifier');
   }
 
-
   /**
-   * Get City
+   * Get City.
    *
    * @return string
    */
@@ -85,4 +90,5 @@ class CvrServiceResult {
       ? $this->propertyAccessor->getValue($this->response, $property)
       : '';
   }
+
 }

@@ -14,11 +14,12 @@ use ItkDev\Serviceplatformen\Request\InvocationContextRequestGenerator;
 use ItkDev\Serviceplatformen\Service\OnlineService;
 
 /**
- * CvrService
+ * CvrService.
  */
 class CvrService {
 
-  /** @var \ItkDev\Serviceplatformen\Service\OnlineService */
+  /**
+   * @var \ItkDev\Serviceplatformen\Service\OnlineService*/
   private $onlineService;
 
   /**
@@ -96,4 +97,5 @@ class CvrService {
 
     return new CvrServiceResult($response);
   }
+
 }
