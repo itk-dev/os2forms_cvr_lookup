@@ -56,5 +56,8 @@ The elements provided:
 Run phpcs with the provided configuration:
 
 ```shell
-/path/to/your/phpcs --standard=phpcs.xml.dist
+composer coding-standards-check
+
+// Apply coding standards
+composer coding-standards-apply
 ```
