@@ -13,7 +13,7 @@
     "prefer-stable": true,
     "require": {
         "ext-soap": "*",
-        "itk-dev/serviceplatformen": "^1.0",
+        "itk-dev/serviceplatformen": "^1.1.0",
         "php-http/guzzle6-adapter": "^2.0.1",
         "http-interop/http-factory-guzzle": "^1.0.0",
         "symfony/property-access": "^4.4"
