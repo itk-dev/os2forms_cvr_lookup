@@ -1,6 +1,8 @@
 # OS2Forms CVR Lookup
 
-Query the Danish CVR register for Drupal Webforms.
+Query the Danish CVR register for Drupal Webforms. 
+
+Service: https://digitaliseringskataloget.dk/integration/sf1530
 
 ## Installation
 
