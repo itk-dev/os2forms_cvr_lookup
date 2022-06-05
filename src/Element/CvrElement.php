@@ -23,7 +23,7 @@ class CvrElement extends Textfield {
     $element['#element_validate'] = [[$this, 'validate']];
     $element['#ajax'] = [
       'callback' => [$this, 'ajaxCallback'],
-      'event' => 'change',
+      'event' => 'os2forms_cvr_lookup:change',
       'progress' => [
         'type' => 'throbber',
         'message' => $this->t('Looking up CVR'),
