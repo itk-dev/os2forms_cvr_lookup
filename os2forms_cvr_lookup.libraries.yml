@@ -1,0 +1,6 @@
+os2forms_cvr_lookup:
+  version: VERSION
+  js:
+    js/scripts.js: {}
+  dependencies:
+     - core/drupal.ajax
