@@ -4,11 +4,10 @@ namespace Drupal\os2forms_cvr_lookup\CVR;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-/**
- *
+/** 
+ *  Encapsulates a result from the CVR service.
  */
-class CvrServiceResult
-{
+class CvrServiceResult {
 
   /**
    * The original response from the CVR Service.
@@ -24,11 +23,10 @@ class CvrServiceResult
    */
   private $propertyAccessor;
 
-  /** 
+  /**
    * Constructor.
    */
-  public function __construct(object $response)
-  {
+  public function __construct(object $response) {
     $this->response = $response;
     $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
   }
@@ -37,9 +35,9 @@ class CvrServiceResult
    * Get name.
    *
    * @return string
+   *   Containing the name of the company
    */
-  public function getName(): string
-  {
+  public function getName(): string {
     return $this->getProperty('GetLegalUnitResponse.LegalUnit.LegalUnitName.name');
   }
 
@@ -47,9 +45,9 @@ class CvrServiceResult
    * Get Street Name.
    *
    * @return string
+   *   Containing the name of the street
    */
-  public function getStreetName(): string
-  {
+  public function getStreetName(): string {
     return $this->getProperty('GetLegalUnitResponse.LegalUnit.AddressOfficial.AddressPostalExtended.StreetName');
   }
 
@@ -57,27 +55,29 @@ class CvrServiceResult
    * Get House Number.
    *
    * @return string
+   *   Containing the number of the building
    */
-  public function getHouseNumber(): string
-  {
+  public function getHouseNumber(): string {
     return $this->getProperty('GetLegalUnitResponse.LegalUnit.AddressOfficial.AddressPostalExtended.StreetBuildingIdentifier');
   }
+
   /**
-   * Get side.
+   * Get floor.
    *
    * @return string
+   *   Containing the floor of the building
    */
-  public function getFloor(): string
-  {
+  public function getFloor(): string {
     return $this->getProperty('GetLegalUnitResponse.LegalUnit.AddressOfficial.AddressPostalExtended.FloorIdentifier');
   }
+
   /**
    * Get side.
    *
    * @return string
+   *   Containing the side of the apartment on the floor
    */
-  public function getSide(): string
-  {
+  public function getSide(): string {
     return $this->getProperty('GetLegalUnitResponse.LegalUnit.AddressOfficial.AddressPostalExtended.SuiteIdentifier');
   }
 
@@ -85,9 +85,9 @@ class CvrServiceResult
    * Get Postal Code.
    *
    * @return string
+   *   Containing the postal code
    */
-  public function getPostalCode(): string
-  {
+  public function getPostalCode(): string {
     return $this->getProperty('GetLegalUnitResponse.LegalUnit.AddressOfficial.AddressPostalExtended.PostCodeIdentifier');
   }
 
@@ -95,17 +95,17 @@ class CvrServiceResult
    * Get City.
    *
    * @return string
+   *   Containing the city
    */
-  public function getCity(): string
-  {
+  public function getCity(): string {
     return $this->getProperty('GetLegalUnitResponse.LegalUnit.AddressOfficial.AddressPostalExtended.DistrictName');
   }
 
-    /**
+  /**
    * Get full address (one line).
    *
    * @return string
-   *   The formatted address.
+   *   Containing the formatted address.
    */
   public function getAddress(): string {
     $address = $this->getStreetName();
@@ -134,10 +134,9 @@ class CvrServiceResult
    * Get all values in an associative array.
    *
    * @return array
-   *   An array with all values.
+   *   Containing all values
    */
-  public function toArray(): array
-  {
+  public function toArray(): array {
     return [
       'name' => $this->getName(),
       'postal_code' => $this->getPostalCode(),
@@ -146,7 +145,7 @@ class CvrServiceResult
       'house_number' => $this->getHouseNumber(),
       'floor' => $this->getFloor(),
       'side' => $this->getSide(),
-      'address' => $this->getAddress()
+      'address' => $this->getAddress(),
     ];
   }
 
@@ -157,12 +156,12 @@ class CvrServiceResult
    *   Name of property.
    *
    * @return string
-   *   The value of the property. Empty if property does not exist.
+   *   Containing the value of the property. Empty if property does not exist.
    */
-  private function getProperty(string $property): string
-  {
+  private function getProperty(string $property): string {
     return $this->propertyAccessor->isReadable($this->response, $property)
       ? $this->propertyAccessor->getValue($this->response, $property)
       : '';
   }
+
 }
