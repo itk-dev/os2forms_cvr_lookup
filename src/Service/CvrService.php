@@ -81,6 +81,16 @@ class CvrService implements CvrServiceInterface {
     $this->onlineService = new OnlineService($soapClient, $requestGenerator);
   }
 
+  /**
+   * Performs a call on the CVR Data Extended service.
+   *
+   * @param string $cvr
+   *   The CVR number to search for.
+   *
+   * @return \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult
+   *   The CVR Service Result.
+   *
+   */
   public function search($cvr) {
     $response = $this->onlineService->getLegalUnit($cvr);
     return new CvrServiceResult($response);
