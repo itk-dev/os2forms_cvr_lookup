@@ -14,9 +14,9 @@ use ItkDev\Serviceplatformen\Request\InvocationContextRequestGenerator;
 use ItkDev\Serviceplatformen\Service\OnlineService;
 
 /**
- * CvrService.
+ * Cvr Service.
  */
-class CvrService {
+class CvrService implements CvrServiceInterface {
 
   /**
    * @var \ItkDev\Serviceplatformen\Service\OnlineService*/
@@ -26,7 +26,9 @@ class CvrService {
    * CvrService constructor.
    *
    * @param \GuzzleHttp\Client $guzzleClient
+   *   Guzzle client.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config factort.
    *
    * @throws \ItkDev\AzureKeyVault\Exception\TokenException
    * @throws \ItkDev\Serviceplatformen\Certificate\Exception\CertificateLocatorException
@@ -82,19 +84,16 @@ class CvrService {
   }
 
   /**
-   * Performs a call on the Person Base Data Extended service.
+   * Performs a call on the CVR Data Extended service.
    *
    * @param string $cvr
    *   The CVR number to search for.
    *
    * @return \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult
    *   The CVR Service Result.
-   *
-   * @throws \ItkDev\Serviceplatformen\Service\Exception\ServiceException
    */
-  public function search(string $cvr): CvrServiceResult {
+  public function search($cvr): CvrServiceResult {
     $response = $this->onlineService->getLegalUnit($cvr);
-
     return new CvrServiceResult($response);
   }
 
