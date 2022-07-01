@@ -5,20 +5,22 @@ namespace Drupal\os2forms_cvr_lookup\Plugin\WebformElement;
 use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementCompanyInterface;
 
 /**
+ * * CVR Value Element.
+ *
  * @WebformElement(
- *   id = "cvr_city_element",
- *   label = @Translation("CVR City Element"),
- *   description = @Translation("This element will be populated with the city from the CVR query result"),
+ *   id = "cvr_value_element",
+ *   label = @Translation("CVR Value Element"),
+ *   description = @Translation("This element will be prepopulated with the CVR number"),
  *   category = @Translation("CVR elements")
  * )
  */
-class CvrCityElement extends CvrLookupElement implements NemidElementCompanyInterface {
+class CvrValueElement extends CvrLookupElement implements NemidElementCompanyInterface {
 
   /**
    * {@inheritdoc}
    */
   public function getPrepopulateFieldFieldKey() {
-    return 'city';
+    return 'cvr';
   }
 
 }
