@@ -92,7 +92,7 @@ class CvrService implements CvrServiceInterface {
    * @return \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult
    *   The CVR Service Result.
    */
-  public function search($cvr) {
+  public function search($cvr): CvrServiceResult {
     $response = $this->onlineService->getLegalUnit($cvr);
     return new CvrServiceResult($response);
   }

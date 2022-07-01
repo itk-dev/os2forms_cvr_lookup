@@ -115,23 +115,13 @@ abstract class CvrLookupElement extends NemidElementBase {
 
       if ($plugin->isAuthenticated()) {
         try {
-          $cvr = $plugin->fetchValue("cvr");
+          $cvr = $plugin->fetchValue('cvr');
           if ($cvr) {
             $result = $this->cvrService->search($cvr);
             $data = $result->toArray();
             // Add data for the CVR value element.
             $data['cvr'] = $cvr;
-            // Merge in some values from the NemID login provider.
-            $data += array_filter(
-              array_map(
-                [$plugin, 'fetchValue'],
-                [
-                  'pid' => 'pid',
-                  // Will replace PID in the future https://migrering.nemlog-in.dk/nemlog-in-broker/privat-tjenesteudbyder/opslagstjenester/erstatning-til-pid-rid-uuid/
-                  'uuid' => 'uuid',
-                ]
-              )
-            );
+
             $form_state->set(static::FORM_STATE_DATA, $data);
           }
         }

@@ -4,8 +4,8 @@ namespace Drupal\os2forms_cvr_lookup\CVR;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-/** 
- *  Encapsulates a result from the CVR service.
+/**
+ * Encapsulates a result from the CVR service.
  */
 class CvrServiceResult {
 
