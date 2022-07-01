@@ -1,0 +1,154 @@
+on: pull_request
+name: PR Review
+jobs:
+  test-composer-files:
+    name: Validate composer
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '7.4', '8.0' ]
+        dependency-version: [ prefer-lowest, prefer-stable ]
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: json
+          coverage: none
+          tools: composer:v2
+      # https://github.com/shivammathur/setup-php#cache-composer-dependencies
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Validate composer files
+        run: |
+          composer validate --strict composer.json
+          # Check that dependencies resolve.
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+
+  php-check-coding-standards:
+    name: PHP - Check Coding Standards
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '7.4', '8.0' ]
+        dependency-version: [ prefer-lowest, prefer-stable ]
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: json
+          coverage: none
+          tools: composer:v2
+      # https://github.com/shivammathur/setup-php#cache-composer-dependencies
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --no-progress
+      - name: PHPCS
+        run: |
+          composer coding-standards-check/phpcs
+
+  php-code-analysis:
+    name: PHP - Code analysis
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '7.4', '8.0' ]
+        dependency-version: [ prefer-lowest, prefer-stable ]
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: json, gd
+          coverage: none
+          tools: composer:v2
+      # https://github.com/shivammathur/setup-php#cache-composer-dependencies
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: drupal-check
+        run: |
+          # We need a Drupal project to run drupal-check (cf. https://github.com/mglaman/drupal-check#usage)
+          # Install Drupal
+          composer --no-interaction create-project drupal/recommended-project --stability=dev drupal
+          # Copy our module source code into the Drupal module folder.
+          mkdir -p drupal/web/modules/contrib/azure_ad_delta_sync
+          cp -r azure_ad_delta_sync.* composer.json src drupal/web/modules/contrib/azure_ad_delta_sync
+          # Add our module as a composer repository.
+          composer --no-interaction --working-dir=drupal config repositories.itk-dev/azure_ad_delta_sync path web/modules/contrib/azure_ad_delta_sync
+          # Restore Drupal composer repository.
+          composer --no-interaction --working-dir=drupal config repositories.drupal composer https://packages.drupal.org/8
+
+          # Require our module.
+          composer --no-interaction --working-dir=drupal require 'itk-dev/azure_ad_delta_sync:*'
+
+          # Check code
+          composer --no-interaction --working-dir=drupal require --dev drupal/core-dev
+          cd drupal/web/modules/contrib/azure_ad_delta_sync && composer --no-interaction install && composer code-analysis
+
+  # Naming?!
+  php-test:
+    name: PHP - Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '7.4', '8.0' ]
+    steps:
+      - uses: actions/checkout@master
+      - name: Run tests
+        run: |
+          # https://dockerfile.readthedocs.io/en/latest/content/DockerImages/dockerfiles/php-nginx.html
+          docker run -d --publish 8888:80 --env WEB_DOCUMENT_ROOT=/app/web --name drupal_test webdevops/php-nginx:${{ matrix.php-versions }}-alpine
+
+          # Create a new Drupal project
+          docker exec drupal_test composer --no-interaction create-project drupal/recommended-project --stability=dev app
+          # Install Drush
+          docker exec drupal_test composer --working-dir=/app require drush/drush
+          # Require test dependencies
+          docker exec drupal_test composer --working-dir=/app require --dev phpspec/prophecy-phpunit --with-all-dependencies
+
+          # Copy our code into the Drupal module folder
+          docker exec drupal_test mkdir -p /app/web/modules/contrib/azure_ad_delta_sync
+          for source in *; do
+            docker cp $source drupal_test:/app/web/modules/contrib/azure_ad_delta_sync
+          done
+
+          # Add our module as a composer repository.
+          docker exec drupal_test composer --working-dir=/app config repositories.itk-dev/azure_ad_delta_sync path web/modules/contrib/azure_ad_delta_sync
+          # Require our module.
+          docker exec drupal_test composer --working-dir=/app require 'itk-dev/azure_ad_delta_sync:*'
+
+          # Copy our phpunit configuration into the Drupal folder.
+          docker cp .github/resources/phpunit.xml drupal_test:/app/web
+          # Install Drupal
+          docker exec drupal_test /app/vendor/bin/drush site:install minimal --db-url=sqlite://localhost//tmp/db.sqlite
+          # Enable our module
+          docker exec drupal_test /app/vendor/bin/drush --yes pm:enable azure_ad_delta_sync
+          # Run our module tests
+          docker exec drupal_test sh -c 'cd /app/web; ../vendor/bin/phpunit modules/contrib/azure_ad_delta_sync/tests/src/Functional'
