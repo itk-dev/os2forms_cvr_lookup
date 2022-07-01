@@ -25,5 +25,10 @@
     "scripts": {
         "coding-standards-check": "phpcs --standard=phpcs.xml.dist",
         "coding-standards-apply": "phpcbf --standard=phpcs.xml.dist"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
