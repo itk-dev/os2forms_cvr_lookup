@@ -36,9 +36,12 @@ class CvrElement extends Textfield {
   /**
    * Validation.
    *
-   * @param $element
+   * @param array $element
+   *   Element to be validated.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * @param $complete_form
+   *   Current state of the form.
+   * @param array $complete_form
+   *   The complete form structure.
    */
   public function validate(&$element, FormStateInterface $form_state, &$complete_form) {
     if ($element['#value'] !== '') {
@@ -52,9 +55,12 @@ class CvrElement extends Textfield {
    * Call back method when performing ajax request.
    *
    * @param array $form
+   *   The form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Current state of the form.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Ajax response
    *
    * @throws \ItkDev\Serviceplatformen\Service\Exception\ServiceException
    */
@@ -97,6 +103,7 @@ class CvrElement extends Textfield {
     $response->addCommand($this->getHouseNumberInvokeCommand($result));
     $response->addCommand($this->getPostalCodeInvokeCommand($result));
     $response->addCommand($this->getCityInvokeCommand($result));
+    $response->addCommand($this->getAddressInvokeCommand($result));
 
     return $response;
   }
@@ -105,8 +112,10 @@ class CvrElement extends Textfield {
    * Get Name Invoke Command.
    *
    * @param \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult $result
+   *   Service result.
    *
    * @return \Drupal\Core\Ajax\InvokeCommand
+   *   Invoke command
    */
   private function getNameInvokeCommand(CvrServiceResult $result) {
     $selector = '.cvr-name';
@@ -120,8 +129,10 @@ class CvrElement extends Textfield {
    * Get Street Name Invoke Command.
    *
    * @param \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult $result
+   *   Service result.
    *
    * @return \Drupal\Core\Ajax\InvokeCommand
+   *   Invoke command
    */
   public function getStreetNameInvokeCommand(CvrServiceResult $result) {
     $selector = '.cvr-street-name';
@@ -135,8 +146,10 @@ class CvrElement extends Textfield {
    * Get House Number Invoke Command.
    *
    * @param \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult $result
+   *   Service result.
    *
    * @return \Drupal\Core\Ajax\InvokeCommand
+   *   Invoke command
    */
   public function getHouseNumberInvokeCommand(CvrServiceResult $result) {
     $selector = '.cvr-house-number';
@@ -150,8 +163,10 @@ class CvrElement extends Textfield {
    * Get Postal Code Invoke Command.
    *
    * @param \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult $result
+   *   Service result.
    *
    * @return \Drupal\Core\Ajax\InvokeCommand
+   *   Invoke command
    */
   public function getPostalCodeInvokeCommand(CvrServiceResult $result) {
     $selector = '.cvr-postal-code';
@@ -165,13 +180,32 @@ class CvrElement extends Textfield {
    * Get City Invoke Command.
    *
    * @param \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult $result
+   *   Service result.
    *
    * @return \Drupal\Core\Ajax\InvokeCommand
+   *   Invoke command
    */
   public function getCityInvokeCommand(CvrServiceResult $result) {
     $selector = '.cvr-city';
     $method = 'val';
     $arguments = [$result->getCity()];
+
+    return new InvokeCommand($selector, $method, $arguments);
+  }
+
+  /**
+   * Get Address Invoke Command.
+   *
+   * @param \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult $result
+   *   Service result.
+   *
+   * @return \Drupal\Core\Ajax\InvokeCommand
+   *   Invoke command
+   */
+  public function getAddressInvokeCommand(CvrServiceResult $result) {
+    $selector = '.cvr-address';
+    $method = 'val';
+    $arguments = [$result->getAddress()];
 
     return new InvokeCommand($selector, $method, $arguments);
   }

@@ -2,7 +2,7 @@
 
 namespace Drupal\os2forms_cvr_lookup\Plugin\WebformElement;
 
-use Drupal\webform\Plugin\WebformElement\TextField;
+use Drupal\os2forms_nemid\Plugin\WebformElement\NemidElementCompanyInterface;
 
 /**
  * @WebformElement(
@@ -12,6 +12,13 @@ use Drupal\webform\Plugin\WebformElement\TextField;
  *   category = @Translation("CVR elements")
  * )
  */
-class CvrStreetNameElement extends TextField {
+class CvrStreetNameElement extends CvrLookupElement implements NemidElementCompanyInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPrepopulateFieldFieldKey() {
+    return 'street_name';
+  }
 
 }
