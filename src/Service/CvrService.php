@@ -16,7 +16,7 @@ use ItkDev\Serviceplatformen\Service\OnlineService;
 /**
  * CvrService.
  */
-class CvrService {
+class CvrService implements CvrServiceInterface {
 
   /**
    * @var \ItkDev\Serviceplatformen\Service\OnlineService*/
@@ -24,7 +24,7 @@ class CvrService {
 
   /**
    * CvrService constructor.
-   *
+   *  
    * @param \GuzzleHttp\Client $guzzleClient
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *
@@ -81,20 +81,8 @@ class CvrService {
     $this->onlineService = new OnlineService($soapClient, $requestGenerator);
   }
 
-  /**
-   * Performs a call on the Person Base Data Extended service.
-   *
-   * @param string $cvr
-   *   The CVR number to search for.
-   *
-   * @return \Drupal\os2forms_cvr_lookup\CVR\CvrServiceResult
-   *   The CVR Service Result.
-   *
-   * @throws \ItkDev\Serviceplatformen\Service\Exception\ServiceException
-   */
-  public function search(string $cvr): CvrServiceResult {
+  public function search($cvr) {
     $response = $this->onlineService->getLegalUnit($cvr);
-
     return new CvrServiceResult($response);
   }
 

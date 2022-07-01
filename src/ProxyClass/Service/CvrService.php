@@ -12,7 +12,7 @@ namespace Drupal\os2forms_cvr_lookup\ProxyClass\Service {
      *
      * @see \Drupal\Component\ProxyBuilder
      */
-    class CvrService
+    class CvrService implements \Drupal\os2forms_cvr_lookup\Service\CvrServiceInterface
     {
 
         use \Drupal\Core\DependencyInjection\DependencySerializationTrait;
