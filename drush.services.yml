@@ -1,0 +1,6 @@
+services:
+  Drupal\os2forms_cvr_lookup\Commands\Commands:
+      arguments:
+        - '@os2forms_cvr_lookup.service'
+      tags:
+        - { name: drush.command }
