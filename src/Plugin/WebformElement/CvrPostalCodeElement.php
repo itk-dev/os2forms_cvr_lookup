@@ -17,7 +17,7 @@ class CvrPostalCodeElement extends CvrLookupElement implements NemidElementCompa
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'postal_code';
   }
 

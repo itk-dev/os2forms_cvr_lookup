@@ -17,7 +17,7 @@ class CvrStreetNameElement extends CvrLookupElement implements NemidElementCompa
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'street_name';
   }
 
