@@ -17,7 +17,7 @@ class CvrHouseNumberElement extends CvrLookupElement implements NemidElementComp
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'house_number';
   }
 

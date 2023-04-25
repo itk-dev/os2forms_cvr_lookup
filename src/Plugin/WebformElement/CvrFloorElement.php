@@ -17,7 +17,7 @@ class CvrFloorElement extends CvrLookupElement implements NemidElementCompanyInt
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'floor';
   }
 
