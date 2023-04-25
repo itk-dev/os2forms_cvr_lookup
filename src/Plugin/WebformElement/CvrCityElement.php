@@ -17,7 +17,7 @@ class CvrCityElement extends CvrLookupElement implements NemidElementCompanyInte
   /**
    * {@inheritdoc}
    */
-  public function getPrepopulateFieldFieldKey() {
+  public function getPrepopulateFieldFieldKey(array &$element) {
     return 'city';
   }
 
