@@ -63,15 +63,13 @@ class CvrService implements CvrServiceInterface {
       $config->get('azure_key_vault_secret_version')
     );
 
-    $pathToWsdl = $config->get('service_contract');
-
-    $options = [
-      'local_cert' => $certificateLocator->getAbsolutePathToCertificate(),
-      'passphrase' => $certificateLocator->getPassphrase(),
-      'location' => $config->get('service_endpoint'),
+    $soapClientOptions = [
+      'wsdl' => $config->get('service_contract'),
+      'certificate_locator' => $certificateLocator,
+      'options' => [
+        'location' => $config->get('service_endpoint'),
+      ],
     ];
-
-    $soapClient = new \SoapClient($pathToWsdl, $options);
 
     $requestGenerator = new InvocationContextRequestGenerator(
       $config->get('service_agreement_uuid'),
@@ -80,7 +78,7 @@ class CvrService implements CvrServiceInterface {
       $config->get('user_uuid')
     );
 
-    $this->onlineService = new OnlineService($soapClient, $requestGenerator);
+    $this->onlineService = new OnlineService($soapClientOptions, $requestGenerator);
   }
 
   /**
